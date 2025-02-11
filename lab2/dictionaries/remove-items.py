@@ -27,7 +27,7 @@ print(thisdict)
 thisdict = {
   "brand": "Ford",
   "model": "Mustang",
-  "year": 
+  "year": 1964
 }
 del thisdict
 print(thisdict) 
