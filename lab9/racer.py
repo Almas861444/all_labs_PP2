@@ -124,7 +124,7 @@ while run:
     
     if pygame.sprite.spritecollideany(racer, enemies):  
         crash_sound.play()
-        time.sleep(0.5)  
+        time.sleep(0.5) 
 
         screen.fill((255, 255, 255))
         screen.blit(gameover, (100, 250))
