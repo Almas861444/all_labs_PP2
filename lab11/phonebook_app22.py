@@ -70,9 +70,9 @@ def delete_data():
 # 6. Paginated results
 def get_paginated():
     limit = int(input("Enter number of records per page: "))
-    page = int(input("Enter page number (starting from 0): "))
-    offset = limit * page
-    cur.execute("SELECT * FROM phonebook22 get_paginated(%s, %s)", (limit, offset))
+    page = int(input("Enter page number: "))
+    offset = limit * (page-1)
+    cur.execute("SELECT * FROM phonebook22 LIMIT %s OFFSET %s", (limit, offset))
     rows = cur.fetchall()
     for row in rows:
         print(row)
