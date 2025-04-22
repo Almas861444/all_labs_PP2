@@ -1,14 +1,16 @@
 import psycopg2
 import csv
 
-conn = psycopg2.connect(
-    dbname = "phonebook_db",
-    user = "postgres",
-    password = "Almas200",
-    host = "localhost",
-    port = "5432"
-)
+def connect():
+    return psycopg2.connect(
+        dbname = "phonebook_db",
+        user = "postgres",
+        password = "Almas200",
+        host = "localhost",
+        port="5432"
+    )
 
+conn = connect()
 cur = conn.cursor()
 
 # 1. Insert from CSV
@@ -84,7 +86,39 @@ def show_all():
     for row in rows:
         print(row)
 
-# Menu
+def insert_many_users_directly():
+    names = input("Names: ").split(',')
+    phones = input("Phones: ").split(',')
+
+    names = [n.strip() for n in names]
+    phones = [p.strip() for p in phones]
+
+    if len(names) != len(phones):
+        print("Error!")
+        return
+
+    invalid = []
+    for name, phone in zip(names, phones):
+        if phone.isdigit():  # Тек цифрлардан тұруы керек
+            cur.execute("INSERT INTO phonebook22 (name, phone) VALUES (%s, %s)", (name, phone))
+            print(f"Added contact -> name: {name}, phone: {phone}")
+        else:
+            invalid.append((name, phone))
+
+    conn.commit()
+
+    if invalid:
+        print("\n Error phone:")
+        for n, p in invalid:
+            print(f"name: {n}, phone: {p}")
+    else:
+        print("\n All contacts added well.")
+
+   
+    conn.commit()
+    cur.close()
+    conn.close()
+
 def menu():
     while True:
         print("\nPhoneBook Menu")
@@ -95,6 +129,7 @@ def menu():
         print("5. Delete by name or phone")
         print("6. Paginated view")
         print("7. Show all")
+        print("8. Many contacts")
         print("0. Exit")
 
         choice = input("Choose: ")
@@ -114,6 +149,8 @@ def menu():
             get_paginated()
         elif choice == '7':
             show_all()
+        elif choice == '8':
+            insert_many_users_directly()
         elif choice == '0':
             print("Exiting...")
             break
